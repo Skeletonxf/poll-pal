@@ -30,7 +30,7 @@ function verifyNameUnique(name) {
 function verifyVotingType(type) {
   return {
     msg: "Invalid voting type",
-    error: !(['yesno', 'stv', 'agreement'].includes(type))
+    error: !(['stv', 'agreement'].includes(type))
   }
 }
 
@@ -65,7 +65,8 @@ router.post('/', async (req, res) => {
   let name = req.body.name;
   let question = req.body.question;
   let type = req.body.type;
-  console.log(`Voting type ${type}`)
+  let responses = req.body.responses.split(',');
+  console.log(`Responses ${responses} ${req.body.responses}`)
   let passphrase = bcrypt.hashSync(req.body.passphrase, saltRounds)
   let errors = await verifyNameUnique(name)
   if (errors.error) {
@@ -85,14 +86,13 @@ router.post('/', async (req, res) => {
     }
     return
   }
-  // TODO other fields
   // Create Vote from form data
-  console.log(`Passphrase ${passphrase}`)
   mongoose.model('Vote').create({
     name: name,
     question: question,
     passphrase: passphrase,
-    type: type
+    type: type,
+    responses: responses
   }, (err, vote) => {
     if (err) {
       res.send("There was a problem adding the information to the database.");
@@ -186,7 +186,8 @@ router.get('/:id/edit', (req, res) => {
       html: () => {
         res.render('votes/edit', {
           title: 'Vote' + vote._id,
-          vote: vote
+          vote: vote,
+          responses: vote.responses.join(',')
         });
       }
     });
@@ -199,6 +200,7 @@ router.put('/:id/edit', (req, res) => {
   let name = req.body.name;
   let question = req.body.question;
   let type = req.body.type;
+  let responses = req.body.responses.split(',')
   let errors = verifyVotingType(type)
   if (errors.error) {
     if (errors.msg) {
@@ -228,7 +230,8 @@ router.put('/:id/edit', (req, res) => {
     vote.update({
       name : name,
       question: question,
-      type: type
+      type: type,
+      responses: responses
     }, (err, voteID) => {
       if (err) {
         res.send('There was a problem updating the information to the database.');

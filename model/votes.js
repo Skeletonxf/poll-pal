@@ -6,6 +6,7 @@ var voteSchema = new mongoose.Schema({
   name: String, // session name, unqiue to one instance
   passphrase: String, // authentication for the Vote
   question: String,
-  type: String // vote type ie agreement/stv
+  type: String, // vote type ie agreement/stv
+  responses: [String] // response types
 });
 let Vote = mongoose.model('Vote', voteSchema);

@@ -18,10 +18,8 @@ block content
           option(value="stv" selected) Ranked Choice Voting
         else
           option(value="stv") Ranked Choice Voting
-        if vote.type === 'yesno'
-          option(value="yesno" selected) Yes/No
-        else
-          option(value="yesno") Yes/No
+    label Responses:
+      textarea#inputResponses(name="responses")=responses
     label Passphrase:
       input#inputPassphrase(type='password', value='', name='passphrase')
     label

@@ -13,7 +13,9 @@ block content
       select(name="type")
         option(value="agreement") Agreement Voting
         option(value="stv") Ranked Choice Voting
-        option(value="yesno") Yes/No
+
+    label Responses:
+      textarea#inputResponses(name="responses") Yes,No,Abstain
 
     label Passphrase:
       input#inputPassphrase(type="text", name="passphrase" value=passphrase)
