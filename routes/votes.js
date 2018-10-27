@@ -11,6 +11,22 @@ const randomWord = require('random-word');
 const Filter = require('bad-words');
 let filter = new Filter();
 
+function verifyNameUnique(name) {
+  return mongoose.model('Vote').find({
+    name: name
+  }).then(others => {
+    return {
+      msg: "Session name in use",
+      error: others.length > 0
+    }
+  }).catch(error => {
+    console.log(`Error ${error}`)
+    return {
+      error: true
+    }
+  })
+}
+
 //Any requests to this controller must pass through this 'use' function
 //Copy and pasted from method-override
 router.use(bodyParser.urlencoded({ extended: true }))
@@ -36,46 +52,41 @@ router.get('/', (req, res, next) => {
 })
 
 // New vote form page
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   // Get values from POST request.
   // These can be done through forms or REST calls. These rely on the "name" attributes for forms
   let name = req.body.name;
-  mongoose.model('Vote').find({ name: name }, (err, others) => {
-    if (others.length > 0) {
-      res.send("Session name is already in use");
-      return
+  console.log(`Recieved passphrase ${req.body.passphrase}`)
+  let passphrase = bcrypt.hashSync(req.body.passphrase, saltRounds)
+  let errors = await verifyNameUnique(name)
+  console.log(`Errors ${errors}`)
+  if (errors.error) {
+    if (errors.msg) {
+      res.send(errors.msg)
+    } else {
+      res.send("There was a problem adding the information to the database.")
     }
+    return
+  }
+  // TODO other fields
+  // Create Vote from form data
+  console.log(`Passphrase ${passphrase}`)
+  mongoose.model('Vote').create({
+    name: name,
+    passphrase: passphrase
+  }, (err, vote) => {
     if (err) {
       res.send("There was a problem adding the information to the database.");
+      return;
     }
-    let passphrase = req.body.passphrase
-    bcrypt.hash(passphrase, saltRounds, (err, hash) => {
-      if (err) {
-        res.send("There was a problem adding the information to the database.");
-        return
-      }
-      // store hashed version ONLY
-      passphrase = hash
-      // TODO other fields
-      // Create Vote from form data
-      mongoose.model('Vote').create({
-        name: name,
-        passphrase: passphrase
-      }, (err, vote) => {
-        if (err) {
-          res.send("There was a problem adding the information to the database.");
-          return;
-        }
-        console.log('POST creating new vote: ' + vote);
-        // redirect back to index page
-        res.format({
-          html: () => {
-            res.location("votes");
-            res.redirect("/votes");
-          },
-        });
-      })
-    })
+    console.log('POST creating new vote: ' + vote);
+    // redirect back to index page
+    res.format({
+      html: () => {
+        res.location("votes");
+        res.redirect("/votes");
+      },
+    });
   })
 });
 
@@ -167,31 +178,31 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id/edit', (req, res) => {
   // Get our REST or form values. These rely on the "name" attributes
   let name = req.body.name;
-  let passphrase = req.body.passphrase;
-  bcrypt.hash(passphrase, saltRounds, (err, hash) => {
-    if (err) {
-      res.send("There was a problem updating the information to the database.");
-      return;
-    }
-    // compare to the stored hashed version ONLY by hashing
-    // the plaintext field submitted
-    passphrase = hash
-  })
-
-  mongoose.model('Vote').findById(req.id, function (err, vote) {
-    // check the passphrase is correct
-    if (vote.passphrase !== passphrase) {
+  mongoose.model('Vote').findById(req.id, async (err, vote) => {
+    ok = bcrypt.compareSync(req.body.passphrase, vote.passphrase)
+    if (!ok) {
       res.send('Invalid passphrase');
       return;
+    }
+    if (name !== vote.name) {
+      let errors = await verifyNameUnique(name)
+      if (errors.error) {
+        if (errors.msg) {
+          res.send(errors.msg)
+        } else {
+          res.send('There was a problem updating the information to the database.')
+        }
+        return
+      }
     }
     vote.update({
       name : name
     }, (err, voteID) => {
       if (err) {
-        res.send("There was a problem updating the information to the database: " + err);
+        res.send('There was a problem updating the information to the database.');
         return;
       }
-      //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+      // return to Vote page
       res.format({
         html: () => {
           res.redirect("/votes/" + vote._id);
