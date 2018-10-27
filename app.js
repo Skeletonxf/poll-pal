@@ -9,6 +9,10 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var db = require('./model/db');
+var blob = require('./model/blobs');
+var blobs = require('./routes/blobs');
+
 // create an app
 var app = express();
 
@@ -25,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // process urls with the index router (routes/index.js)
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/blobs', blobs);
 
 // catch 404 errors and forward to error handler
 app.use(function(req, res, next) {
