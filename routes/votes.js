@@ -40,35 +40,45 @@ router.post('/', (req, res) => {
   // Get values from POST request.
   // These can be done through forms or REST calls. These rely on the "name" attributes for forms
   let name = req.body.name;
-  let passphrase = req.body.passphrase
-  bcrypt.hash(passphrase, saltRounds, (err, hash) => {
+  mongoose.model('Vote').find({ name: name }, (err, others) => {
+    if (others.length > 0) {
+      res.send("Session name is already in use");
+      return
+    }
     if (err) {
       res.send("There was a problem adding the information to the database.");
-      return;
     }
-    // store hashed version ONLY
-    passphrase = hash
-  })
-  // TODO other fields
-  // Create Vote from form data
-  mongoose.model('Vote').create({
-    name: name,
-    passphrase: passphrase
-  }, (err, vote) => {
-    if (err) {
-      res.send("There was a problem adding the information to the database.");
-      return;
-    }
-    console.log('POST creating new vote: ' + vote);
-    // redirect back to index page
-    res.format({
-      html: () => {
-        res.location("votes");
-        res.redirect("/votes");
-      },
-    });
+    let passphrase = req.body.passphrase
+    bcrypt.hash(passphrase, saltRounds, (err, hash) => {
+      if (err) {
+        res.send("There was a problem adding the information to the database.");
+        return
+      }
+      // store hashed version ONLY
+      passphrase = hash
+      // TODO other fields
+      // Create Vote from form data
+      mongoose.model('Vote').create({
+        name: name,
+        passphrase: passphrase
+      }, (err, vote) => {
+        if (err) {
+          res.send("There was a problem adding the information to the database.");
+          return;
+        }
+        console.log('POST creating new vote: ' + vote);
+        // redirect back to index page
+        res.format({
+          html: () => {
+            res.location("votes");
+            res.redirect("/votes");
+          },
+        });
+      })
+    })
   })
 });
+
 router.get('/new', (req, res) => {
   // generate a new phrase of words
   let phrase = []

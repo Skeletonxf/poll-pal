@@ -3,7 +3,7 @@ extends ../layout
 block content
 	h1= title
 	form#formAddUser(name="adduser",method="post",action="/votes")
-		p Name:
+		p Session Name:
 			input#inputName(type="text", placeholder="ex. John Smith", name="name")
 		p Passphrase:
 			input#inputPassphrase(type="text", placeholder="", name="passphrase" value=passphrase)

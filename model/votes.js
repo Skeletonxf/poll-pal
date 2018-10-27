@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
 var voteSchema = new mongoose.Schema({
-  session: String,
-  passphrase: String, // created when someone makes a vote
   name: String,
+  passphrase: String, // authentication for the Vote
   questions: [
     {
       question: String,

@@ -7,11 +7,9 @@ var logger = require('morgan');
 
 // import our code from routes/
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 let votesRouter = require('./routes/votes')
 
 var db = require('./model/db');
-var user = require('./model/users');
 let vote = require('./model/votes');
 
 // create an app
@@ -29,7 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // process urls with the index router (routes/index.js)
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/votes', votesRouter);
 
 //TODO No auth error handler
