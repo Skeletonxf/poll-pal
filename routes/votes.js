@@ -56,6 +56,7 @@ router.post('/', async (req, res) => {
   // Get values from POST request.
   // These can be done through forms or REST calls. These rely on the "name" attributes for forms
   let name = req.body.name;
+  let question = req.body.question;
   console.log(`Recieved passphrase ${req.body.passphrase}`)
   let passphrase = bcrypt.hashSync(req.body.passphrase, saltRounds)
   let errors = await verifyNameUnique(name)
@@ -73,6 +74,7 @@ router.post('/', async (req, res) => {
   console.log(`Passphrase ${passphrase}`)
   mongoose.model('Vote').create({
     name: name,
+    question: question,
     passphrase: passphrase
   }, (err, vote) => {
     if (err) {
@@ -150,7 +152,7 @@ router.get('/:id', (req, res) => {
     }
     console.log('GET Retrieving ID: ' + vote._id);
     res.format({
-      html: () => res.render('votes/show', { "vote" : vote })
+      html: () => res.render('votes/show', { vote: vote })
     });
   });
 });
@@ -178,6 +180,7 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id/edit', (req, res) => {
   // Get our REST or form values. These rely on the "name" attributes
   let name = req.body.name;
+  let question = req.body.question;
   mongoose.model('Vote').findById(req.id, async (err, vote) => {
     ok = bcrypt.compareSync(req.body.passphrase, vote.passphrase)
     if (!ok) {
@@ -196,7 +199,8 @@ router.put('/:id/edit', (req, res) => {
       }
     }
     vote.update({
-      name : name
+      name : name,
+      question: question
     }, (err, voteID) => {
       if (err) {
         res.send('There was a problem updating the information to the database.');

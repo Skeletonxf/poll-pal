@@ -1,7 +1,6 @@
 extends ../layout
 
 block content
-  - uid = 'Infophoto ' + vote._id
-  h1= uid
+  h1= vote.question
   - name = 'Name: ' + vote.name
   p= name

@@ -1,11 +1,15 @@
 extends ../layout
 
 block content
-	h1= title
-	form#formAddUser(name="adduser",method="post",action="/votes")
-		p Session Name:
-			input#inputName(type="text", placeholder="ex. John Smith", name="name")
-		p Passphrase:
-			input#inputPassphrase(type="text", placeholder="", name="passphrase" value=passphrase)
-		p
-			button#btnSubmit(type="submit") submit
+  h1= title
+  form#formAddUser(name="adduser",method="post",action="/votes")
+    label Session Name:
+      input#inputName(type="text", placeholder="my-poll", name="name")
+
+    label Question:
+      input#inputQuestion(type="text", name="question")
+
+    label Passphrase:
+      input#inputPassphrase(type="text", name="passphrase" value=passphrase)
+    label
+      button#btnSubmit(type="submit") submit

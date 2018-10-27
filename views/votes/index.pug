@@ -6,8 +6,8 @@ block content
   h1= title
   ul
     each vote, i in votes
+      li= vote.question
       li= vote.name
-      li= vote._id
       form(action=`/votes/${vote._id}/edit`,method='post',enctype='application/x-www-form-urlencoded')
         input(type='hidden',value='DELETE',name='_method')
         button(type='submit').

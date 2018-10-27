@@ -4,11 +4,13 @@ block content
   - voteid = 'Vote ID ' + vote._id
   h1= voteid
   form(action=`/votes/${vote._id}/edit`,method='post',name='updateuser',enctype='application/x-www-form-urlencoded')
-    p Name:
+    label Name:
       input#inputName(type='text', value=vote.name, name='name')
-    p Passphrase:
+    label Question:
+      input#inputQuestion(type="text", name="question")
+    label Passphrase:
       input#inputPassphrase(type='password', value='', name='passphrase')
-    p
+    label
       input(type='hidden',value='PUT',name='_method')
-    p
+    label
       button#btnSubmit(type='submit') Update
