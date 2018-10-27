@@ -7,6 +7,7 @@ var voteSchema = new mongoose.Schema({
   passphrase: String, // authentication for the Vote
   question: String,
   type: String, // vote type ie agreement/stv
-  responses: [String] // response types
+  responses: [String], // response types
+  votes: [[String]] // collection of votes that come in (ordered for stv)
 });
 let Vote = mongoose.model('Vote', voteSchema);
