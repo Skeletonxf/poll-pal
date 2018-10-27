@@ -1,7 +1,9 @@
 extends ../layout
 
 block content
-    h1.
-        Infophoto #{user._id}
-    p Name: #{user.name}
-    p Email: #{user.email}
+  - uid = 'Infophoto ' + user._id
+  h1= uid
+  - name = 'Name: ' + user.name
+  p= name
+  - email = 'Email: ' + user.email
+  p= email
