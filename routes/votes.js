@@ -7,20 +7,24 @@ var methodOverride = require('method-override'); //used to manipulate POST
 const bcrypt = require('bcrypt'); // hashing lib
 const saltRounds = 10;
 
+const randomWord = require('random-word');
+const Filter = require('bad-words');
+let filter = new Filter();
+
 //Any requests to this controller must pass through this 'use' function
 //Copy and pasted from method-override
 router.use(bodyParser.urlencoded({ extended: true }))
 router.use(methodOverride(function(req, res){
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delete it
-    var method = req.body._method
+    let method = req.body._method
     delete req.body._method
     return method
   }
 }))
 
-router.route('/')
-.get((req, res, next) => {
+// Index page
+router.get('/', (req, res, next) => {
   mongoose.model('Vote').find({}, function (err, votes) {
     if (err) {
       return console.error(err);
@@ -31,8 +35,8 @@ router.route('/')
   });
 })
 
-// POST a new vote
-.post((req, res) => {
+// New vote form page
+router.post('/', (req, res) => {
   // Get values from POST request.
   // These can be done through forms or REST calls. These rely on the "name" attributes for forms
   let name = req.body.name;
@@ -65,10 +69,31 @@ router.route('/')
     });
   })
 });
-
-/* GET New Vote page. */
 router.get('/new', (req, res) => {
-  res.render('votes/new', { title: 'Create a Vote' });
+  // generate a new phrase of words
+  let phrase = []
+  let n = 3
+  for (let i = 0; i < n; i++) {
+    let word = randomWord()
+    while (filter.isProfane(word)) {
+      word = randomWord()
+    }
+    phrase.push(word)
+  }
+  let random = Math.floor(Math.random() * 3) // 0, 1 or 2
+  if (random === 0) {
+    var joinType = ' '
+  }
+  if (random === 1) {
+    var joinType = '-'
+  }
+  if (random === 2) {
+    var joinType = '_'
+  }
+  res.render('votes/new', {
+    title: 'Create a Vote',
+    passphrase: phrase.join(joinType)
+  });
 });
 
 // route middleware to validate :id
@@ -96,8 +121,7 @@ router.param('id', (req, res, next, id) => {
 });
 
 // Show a vote
-router.route('/:id')
-.get((req, res) => {
+router.get('/:id', (req, res) => {
   mongoose.model('Vote').findById(req.id, (err, vote) => {
     if (err) {
       console.log('GET Error: There was a problem retrieving: ' + err);
@@ -110,8 +134,8 @@ router.route('/:id')
   });
 });
 
-router.route('/:id/edit')
-.get((req, res) => {
+// View a Vote
+router.get('/:id/edit', (req, res) => {
   mongoose.model('Vote').findById(req.id, function (err, vote) {
     if (err) {
       console.log('GET Error: There was a problem retrieving: ' + err);
@@ -130,7 +154,7 @@ router.route('/:id/edit')
 })
 
 // PUT to update a vote
-.put((req, res) => {
+router.put('/:id/edit', (req, res) => {
   // Get our REST or form values. These rely on the "name" attributes
   let name = req.body.name;
   let passphrase = req.body.passphrase;
@@ -169,7 +193,7 @@ router.route('/:id/edit')
 
 // DELETE a Vote
 // TODO: Reqire passphrase
-.delete((req, res) => {
+router.delete('/:id/edit', (req, res) => {
   mongoose.model('Vote').findById(req.id, function (err, vote) {
     if (err) {
       return console.error(err);
