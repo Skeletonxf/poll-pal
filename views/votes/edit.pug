@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  - voteid = 'Vote ID ' + vote._id
+  h1= voteid
+  form(action=`/votes/${vote._id}/edit`,method='post',name='updateuser',enctype='application/x-www-form-urlencoded')
+    p Name:
+      input#inputName(type='text', value=vote.name, name='name')
+    p Passphrase:
+      input#inputPassphrase(type='text', value='', name='passphrase')
+    p
+      input(type='hidden',value='PUT',name='_method')
+    p
+      button#btnSubmit(type='submit') Update

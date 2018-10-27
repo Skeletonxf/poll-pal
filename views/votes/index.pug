@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  a(href='/votes/new') Create a new Vote
+
+  h1= title
+  ul
+    each vote, i in votes
+      li= vote.name
+      li= vote._id
+      form(action=`/votes/${vote._id}/edit`,method='post',enctype='application/x-www-form-urlencoded')
+        input(type='hidden',value='DELETE',name='_method')
+        button(type='submit').
+          Delete
+      p
+        a(href=`/votes/${vote._id}/edit`) Edit
+      p
+        a(href=`/votes/${vote._id}`) Show

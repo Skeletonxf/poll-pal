@@ -8,9 +8,11 @@ var logger = require('morgan');
 // import our code from routes/
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+let votesRouter = require('./routes/votes')
 
 var db = require('./model/db');
 var user = require('./model/users');
+let vote = require('./model/votes');
 
 // create an app
 var app = express();
@@ -28,6 +30,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // process urls with the index router (routes/index.js)
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/votes', votesRouter);
+
+//TODO No auth error handler
 
 // catch 404 errors and forward to error handler
 app.use(function(req, res, next) {
