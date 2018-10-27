@@ -27,6 +27,13 @@ function verifyNameUnique(name) {
   })
 }
 
+function verifyVotingType(type) {
+  return {
+    msg: "Invalid voting type",
+    error: !(['yesno', 'stv', 'agreement'].includes(type))
+  }
+}
+
 //Any requests to this controller must pass through this 'use' function
 //Copy and pasted from method-override
 router.use(bodyParser.urlencoded({ extended: true }))
@@ -57,10 +64,19 @@ router.post('/', async (req, res) => {
   // These can be done through forms or REST calls. These rely on the "name" attributes for forms
   let name = req.body.name;
   let question = req.body.question;
-  console.log(`Recieved passphrase ${req.body.passphrase}`)
+  let type = req.body.type;
+  console.log(`Voting type ${type}`)
   let passphrase = bcrypt.hashSync(req.body.passphrase, saltRounds)
   let errors = await verifyNameUnique(name)
-  console.log(`Errors ${errors}`)
+  if (errors.error) {
+    if (errors.msg) {
+      res.send(errors.msg)
+    } else {
+      res.send("There was a problem adding the information to the database.")
+    }
+    return
+  }
+  errors = verifyVotingType(type)
   if (errors.error) {
     if (errors.msg) {
       res.send(errors.msg)
@@ -75,7 +91,8 @@ router.post('/', async (req, res) => {
   mongoose.model('Vote').create({
     name: name,
     question: question,
-    passphrase: passphrase
+    passphrase: passphrase,
+    type: type
   }, (err, vote) => {
     if (err) {
       res.send("There was a problem adding the information to the database.");
@@ -181,6 +198,16 @@ router.put('/:id/edit', (req, res) => {
   // Get our REST or form values. These rely on the "name" attributes
   let name = req.body.name;
   let question = req.body.question;
+  let type = req.body.type;
+  let errors = verifyVotingType(type)
+  if (errors.error) {
+    if (errors.msg) {
+      res.send(errors.msg)
+    } else {
+      res.send("There was a problem adding the information to the database.")
+    }
+    return
+  }
   mongoose.model('Vote').findById(req.id, async (err, vote) => {
     ok = bcrypt.compareSync(req.body.passphrase, vote.passphrase)
     if (!ok) {
@@ -200,7 +227,8 @@ router.put('/:id/edit', (req, res) => {
     }
     vote.update({
       name : name,
-      question: question
+      question: question,
+      type: type
     }, (err, voteID) => {
       if (err) {
         res.send('There was a problem updating the information to the database.');

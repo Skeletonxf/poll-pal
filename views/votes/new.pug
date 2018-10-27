@@ -9,6 +9,12 @@ block content
     label Question:
       input#inputQuestion(type="text", name="question")
 
+    label Voting type:
+      select(name="type")
+        option(value="agreement") Agreement Voting
+        option(value="stv") Ranked Choice Voting
+        option(value="yesno") Yes/No
+
     label Passphrase:
       input#inputPassphrase(type="text", name="passphrase" value=passphrase)
     label

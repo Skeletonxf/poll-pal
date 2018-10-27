@@ -7,7 +7,21 @@ block content
     label Name:
       input#inputName(type='text', value=vote.name, name='name')
     label Question:
-      input#inputQuestion(type="text", name="question")
+      input#inputQuestion(type="text", value=vote.question, name="question")
+    label Voting type:
+      select(name="type")
+        if vote.type === 'agreement'
+          option(value="agreement" selected) Agreement Voting
+        else
+          option(value="agreement") Agreement Voting
+        if vote.type === 'stv'
+          option(value="stv" selected) Ranked Choice Voting
+        else
+          option(value="stv") Ranked Choice Voting
+        if vote.type === 'yesno'
+          option(value="yesno" selected) Yes/No
+        else
+          option(value="yesno") Yes/No
     label Passphrase:
       input#inputPassphrase(type='password', value='', name='passphrase')
     label
