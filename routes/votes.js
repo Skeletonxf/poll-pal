@@ -4,6 +4,9 @@ var mongoose = require('mongoose'); //mongo connection
 var bodyParser = require('body-parser'); //parses information from POST
 var methodOverride = require('method-override'); //used to manipulate POST
 
+const bcrypt = require('bcrypt'); // hashing lib
+const saltRounds = 10;
+
 //Any requests to this controller must pass through this 'use' function
 //Copy and pasted from method-override
 router.use(bodyParser.urlencoded({ extended: true }))
@@ -34,6 +37,14 @@ router.route('/')
   // These can be done through forms or REST calls. These rely on the "name" attributes for forms
   let name = req.body.name;
   let passphrase = req.body.passphrase
+  bcrypt.hash(passphrase, saltRounds, (err, hash) => {
+    if (err) {
+      res.send("There was a problem adding the information to the database.");
+      return;
+    }
+    // store hashed version ONLY
+    passphrase = hash
+  })
   // TODO other fields
   // Create Vote from form data
   mongoose.model('Vote').create({
@@ -123,6 +134,15 @@ router.route('/:id/edit')
   // Get our REST or form values. These rely on the "name" attributes
   let name = req.body.name;
   let passphrase = req.body.passphrase;
+  bcrypt.hash(passphrase, saltRounds, (err, hash) => {
+    if (err) {
+      res.send("There was a problem updating the information to the database.");
+      return;
+    }
+    // compare to the stored hashed version ONLY by hashing
+    // the plaintext field submitted
+    passphrase = hash
+  })
 
   mongoose.model('Vote').findById(req.id, function (err, vote) {
     // check the passphrase is correct
