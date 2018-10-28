@@ -2,6 +2,11 @@ extends ../layout
 
 block content
   h1= title
+
+  #header
+    h1  Poll Pal
+    img(src="/public/images/logocrop.png")
+    
   form#formAddVote(name="addvote",method="post",action="/votes")
     label Session Name:
       input#inputName(type="text", placeholder="must-be-unique", name="name")
