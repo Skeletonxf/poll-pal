@@ -3,7 +3,7 @@ extends ../layout
 block content
   - voteid = 'Vote ID ' + vote._id
   h1= voteid
-  form(action=`/votes/${vote._id}/edit`,method='post',name='updateuser',enctype='application/x-www-form-urlencoded')
+  form(action=`/votes/${vote._id}/edit`,method='post',name='updatevote',enctype='application/x-www-form-urlencoded')
     label Name:
       input#inputName(type='text', value=vote.name, name='name')
     label Question:
@@ -14,10 +14,10 @@ block content
           option(value="agreement" selected) Agreement Voting
         else
           option(value="agreement") Agreement Voting
-        if vote.type === 'stv'
-          option(value="stv" selected) Ranked Choice Voting
-        else
-          option(value="stv") Ranked Choice Voting
+        //- if vote.type === 'stv'
+        //-   option(value="stv" selected) Ranked Choice Voting
+        //- else
+        //-   option(value="stv") Ranked Choice Voting
     label Responses:
       textarea#inputResponses(name="responses")=responses
     label Passphrase:

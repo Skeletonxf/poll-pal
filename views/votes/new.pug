@@ -2,9 +2,9 @@ extends ../layout
 
 block content
   h1= title
-  form#formAddUser(name="adduser",method="post",action="/votes")
+  form#formAddVote(name="addvote",method="post",action="/votes")
     label Session Name:
-      input#inputName(type="text", placeholder="my-poll", name="name")
+      input#inputName(type="text", placeholder="must-be-unique", name="name")
 
     label Question:
       input#inputQuestion(type="text", name="question")
@@ -12,7 +12,7 @@ block content
     label Voting type:
       select(name="type")
         option(value="agreement") Agreement Voting
-        option(value="stv") Ranked Choice Voting
+        //- option(value="stv") Ranked Choice Voting
 
     label Responses:
       textarea#inputResponses(name="responses") Yes,No,Abstain

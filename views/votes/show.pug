@@ -4,17 +4,20 @@ block content
   h1= vote.question
   - name = 'Session Name: ' + vote.name
   p= name
-  form(action=`/votes/${vote._id}/vote`,method='patch',name='updateuser',enctype='application/x-www-form-urlencoded')
+  form(action=`/votes/${vote._id}/edit`,method='post',name='submitvote',enctype='application/x-www-form-urlencoded')
     div#choices
       if vote.type === 'stv'
         each response, i in vote.responses
           div.response
             label= response
-              input#inputName(type="number", name=i, value=i+1, min=1, max=vote.responses.length, draggable="true")
+              input#inputName(type="number", name='r' + i,value=i+1, min=1, max=vote.responses.length, draggable="true")
       if vote.type === 'agreement'
         each response, i in vote.responses
           label= response
-            input#inputName(type="checkbox", name=i)
+            input#inputName(type="checkbox", name='r' + i)
 
     label
-      button#btnSubmit(type='submit') Update
+      input(type='hidden',value='PATCH',name='_method')
+
+    label
+      button#btnSubmit(type='submit') Vote

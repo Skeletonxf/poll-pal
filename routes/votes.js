@@ -30,7 +30,7 @@ function verifyNameUnique(name) {
 function verifyVotingType(type) {
   return {
     msg: "Invalid voting type",
-    error: !(['stv', 'agreement'].includes(type))
+    error: !(['agreement'].includes(type)) //'stv'
   }
 }
 
@@ -150,6 +150,7 @@ router.param('id', (req, res, next, id) => {
       });
       return;
     }
+    console.log(req.originalMethod)
     console.log('validating vote id ' + vote);
     //uncomment this next line if you want to see every JSON document response for every GET/PUT/DELETE call
     //console.log(vote);
@@ -170,6 +171,22 @@ router.get('/:id', (req, res) => {
     console.log('GET Retrieving ID: ' + vote._id);
     res.format({
       html: () => res.render('votes/show', { vote: vote })
+    });
+  });
+});
+
+// Show a vote's results
+router.get('/:id/results', (req, res) => {
+  mongoose.model('Vote').findById(req.id, (err, vote) => {
+    if (err) {
+      console.log('GET Error: There was a problem retrieving: ' + err);
+      return;
+    }
+    console.log('GET Retrieving ID: ' + vote._id);
+    console.log('Votes: ' + vote)
+
+    res.format({
+      html: () => res.render('votes/results', { vote: vote })
     });
   });
 });
@@ -197,6 +214,7 @@ router.get('/:id/edit', (req, res) => {
 // PUT to update a vote
 router.put('/:id/edit', (req, res) => {
   // Get our REST or form values. These rely on the "name" attributes
+  console.log('PUT')
   let name = req.body.name;
   let question = req.body.question;
   let type = req.body.type;
@@ -211,6 +229,10 @@ router.put('/:id/edit', (req, res) => {
     return
   }
   mongoose.model('Vote').findById(req.id, async (err, vote) => {
+    if (err) {
+      res.send('There was a problem updating the information to the database.');
+      return;
+    }
     ok = bcrypt.compareSync(req.body.passphrase, vote.passphrase)
     if (!ok) {
       res.send('Invalid passphrase');
@@ -245,6 +267,66 @@ router.put('/:id/edit', (req, res) => {
       });
     })
   });
+})
+
+
+// PATCH to make a vote
+router.patch('/:id/edit', (req, res) => {
+  console.log('recieved patch req')
+  mongoose.model('Vote').findById(req.id, (err, vote) => {
+    if (err) {
+      res.send('There was a problem updating the information to the database.');
+      return;
+    }
+    let expectedResponses = vote.responses.length
+    console.log(req.body)
+    // build up rank order collection of votes
+    let votes = []
+    let responseIndexes = [...Array(expectedResponses).keys()]
+    for (let i in responseIndexes) {
+      let input = req.body['r' + i]
+      console.log(input)
+      if (input === 'on') {
+        // checkbox voting order does not matter
+        votes.push(+i + 1)
+      } else {
+        if (input !== undefined) {
+          // assume input is a number
+          votes.push(+input)
+        }
+      }
+    }
+    console.log(`Votes ${votes}`)
+    let seen = new Set()
+    for (let i in votes) {
+      let vote = votes[i]
+      if (seen.has(vote)) {
+        res.send('Vote invalid.');
+        return;
+      }
+      seen.add(vote)
+      if ((vote < 1) || vote > expectedResponses) {
+        console.log(vote)
+        res.send('Vote out of range: invalid.');
+        return;
+      }
+    }
+    // cast vote
+    vote.votes.push(votes)
+    console.log(vote.votes)
+    vote.save((err) => {
+      if (err) {
+        res.send('There was a problem updating the information to the database.');
+        return;
+      }
+      // return to Vote page
+      res.format({
+        html: () => {
+          res.redirect('/votes/' + vote._id + '/results');
+        },
+      });
+    })
+  })
 })
 
 // DELETE a Vote
