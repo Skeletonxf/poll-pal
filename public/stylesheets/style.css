@@ -67,3 +67,15 @@ body{
   font-size: 30px;
   color: #303030;
 }
+
+#blindContainer{
+  text-align: center;
+  font-family: 'Open Sans Condensed', sans-serif;
+  width: 300px;
+  margin: auto;
+  opacity:0.9;
+  background-color: white;
+  border: 1px #a0a0a0 solid;
+  padding:0px 50px 50px 50px;
+  font-size: 20px;
+}

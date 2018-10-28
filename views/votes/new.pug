@@ -2,27 +2,30 @@ extends ../layout
 
 block content
   h1= title
+  head
+    link(rel='stylesheet', href="https://fonts.googleapis.com/css?family=Dancing+Script|Open+Sans+Condensed:300|Pacifico")
 
   #header
     h1  Poll Pal
     img(src="/public/images/logocrop.png")
-    
-  form#formAddVote(name="addvote",method="post",action="/votes")
-    label Session Name:
-      input#inputName(type="text", placeholder="must-be-unique", name="name")
 
-    label Question:
-      input#inputQuestion(type="text", name="question")
+  #blindContainer
+    form#formAddVote(name="addvote",method="post",action="/votes")
+      label Session Name:
+        input#inputName(type="text", placeholder="must-be-unique", name="name")
 
-    label Voting type:
-      select(name="type")
-        option(value="agreement") Agreement Voting
-        //- option(value="stv") Ranked Choice Voting
+      label Question:
+        input#inputQuestion(type="text", name="question")
 
-    label Responses:
-      textarea#inputResponses(name="responses") Yes,No,Abstain
+      label Voting type:
+        select(name="type")
+          option(value="agreement") Agreement Voting
+          //- option(value="stv") Ranked Choice Voting
 
-    label Passphrase:
-      input#inputPassphrase(type="text", name="passphrase" value=passphrase)
-    label
-      button#btnSubmit(type="submit") submit
+      label Responses:
+        textarea#inputResponses(name="responses") Yes,No,Abstain
+
+      label Passphrase:
+        input#inputPassphrase(type="text", name="passphrase" value=passphrase)
+      label
+        button#btnSubmit(type="submit") submit
