@@ -56,8 +56,9 @@ body{
   //background-color: #a0d0a0;
 }
 
-#buttonJoin{
+#formJoin{
   //background-color: #a0d0d0;
+  display: block;
 }
 
 #header{

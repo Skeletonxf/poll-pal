@@ -15,5 +15,9 @@ block content
   #buttonContainer
     #buttonCreate.button
       | CREATE POLL
-    #buttonJoin.button
-      | JOIN POLL
+    form.button#formJoin(name="findvote",method="post",action="/votes/search")
+      label Session Name:
+          input#inputName(type="text", placeholder="session-name", name="name")
+
+      label
+        button#btnSubmit(type="submit") Join Poll

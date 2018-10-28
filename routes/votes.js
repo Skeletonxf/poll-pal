@@ -58,6 +58,24 @@ router.get('/', (req, res, next) => {
   });
 })
 
+// Search for session id POST
+router.post('/search', (req, res, next) => {
+  mongoose.model('Vote').find({ name: req.body.name }, function (err, votes) {
+    if (votes.length !== 1) {
+      res.send("Invalid session name.")
+      return
+    }
+    let vote = votes[0]
+    // redirect to vote page
+    res.format({
+      html: () => {
+        res.location("votes");
+        res.redirect("/votes/" + vote._id);
+      },
+    });
+  })
+})
+
 // New vote form page
 router.post('/', async (req, res) => {
   // Get values from POST request.
