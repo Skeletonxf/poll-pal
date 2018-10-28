@@ -99,11 +99,11 @@ router.post('/', async (req, res) => {
       return;
     }
     console.log('POST creating new vote: ' + vote);
-    // redirect back to index page
+    // redirect to vote page
     res.format({
       html: () => {
         res.location("votes");
-        res.redirect("/votes");
+        res.redirect("/votes/" + vote._id);
       },
     });
   })
@@ -131,7 +131,7 @@ router.get('/new', (req, res) => {
     var joinType = '_'
   }
   res.render('votes/new', {
-    title: 'Create a Vote',
+    title: 'Create a new Poll',
     passphrase: phrase.join(joinType)
   });
 });
