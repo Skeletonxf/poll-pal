@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt'); // hashing lib
-const saltRounds = 1;
+const saltRounds = 10;
 
 var mongoose = require('mongoose');
 var voteSchema = new mongoose.Schema({

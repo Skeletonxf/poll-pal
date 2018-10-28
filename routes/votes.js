@@ -5,7 +5,7 @@ var bodyParser = require('body-parser'); //parses information from POST
 var methodOverride = require('method-override'); //used to manipulate POST
 
 const bcrypt = require('bcrypt'); // hashing lib
-const saltRounds = 1;
+const saltRounds = 10;
 
 const randomWord = require('random-word');
 const Filter = require('bad-words');
