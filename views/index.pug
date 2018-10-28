@@ -13,8 +13,8 @@ block content
     h1  Poll Pal
     img(src="/public/images/logocrop.png")
   #buttonContainer
-    #buttonCreate.button
-      | CREATE POLL
+    form.button#buttonCreate(action="/votes/new")
+     button.button CREATE POLL
     form.button#formJoin(name="findvote",method="post",action="/votes/search")
       label Session Name:
           input#inputName(type="text", placeholder="session-name", name="name")
