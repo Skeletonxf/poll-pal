@@ -17,9 +17,9 @@ body{
 
 .button{
   font-family: 'Open Sans Condensed', sans-serif;
-
   background-color: white;
   width: 400px;
+  max-width: 90vw;
   border: 1px #a0a0a0 solid;
   height:300px;
   //border-radius: 30px;
@@ -59,6 +59,7 @@ body{
 #formJoin{
   //background-color: #a0d0d0;
   display: block;
+  line-height: normal;
 }
 
 #header{
@@ -67,4 +68,25 @@ body{
   font-family: 'Dancing Script', cursive;
   font-size: 30px;
   color: #303030;
+}
+
+#blindContainer{
+  text-align: center;
+  font-family: 'Open Sans Condensed', sans-serif;
+  width: 400px;
+  margin: auto;
+  opacity:0.9;
+  background-color: white;
+  border: 1px #a0a0a0 solid;
+  padding:0px 50px 50px 50px;
+  font-size: 20px;
+}
+
+#formAddVote label, #formAddVote button {
+  display: block;
+  padding: 0.4em;
+}
+
+form label button {
+  margin: auto;
 }
