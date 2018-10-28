@@ -1,7 +1,9 @@
 extends ../layout
 
 block content
-  h1= vote.question
+  #header
+    h1= vote.question
+    img.logo(src="/images/logocrop.png")
 
   #main
     - name = 'Session Name: ' + vote.name
