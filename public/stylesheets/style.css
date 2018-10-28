@@ -58,7 +58,8 @@ body{
 
 #formJoin{
   //background-color: #a0d0d0;
-  display: block;
+  display: flex;
+  align-items: center;
   line-height: normal;
 }
 
@@ -70,21 +71,22 @@ body{
   color: #303030;
 }
 
-#blindContainer{
+#main {
   text-align: center;
   font-family: 'Open Sans Condensed', sans-serif;
   width: 400px;
+  max-width: 80vw;
   margin: auto;
   opacity:0.9;
   background-color: white;
   border: 1px #a0a0a0 solid;
-  padding:0px 50px 50px 50px;
+  padding:0px 5% 5% 5%;
   font-size: 20px;
 }
 
-#formAddVote label, #formAddVote button {
+#main form label, #main form button {
   display: block;
-  padding: 0.4em;
+  padding: 0.3em;
 }
 
 form label button {

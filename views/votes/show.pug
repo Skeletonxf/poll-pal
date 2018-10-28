@@ -2,10 +2,8 @@ extends ../layout
 
 block content
   h1= vote.question
-  head
-    link(rel='stylesheet', href="https://fonts.googleapis.com/css?family=Dancing+Script|Open+Sans+Condensed:300|Pacifico")
 
-  #blindContainer
+  #main
     - name = 'Session Name: ' + vote.name
     p= name
     form(action=`/votes/${vote._id}/edit`,method='post',name='submitvote',enctype='application/x-www-form-urlencoded')

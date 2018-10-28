@@ -1,8 +1,9 @@
 extends ../layout
 
 block content
-  h1= vote.question
-  each response, i in vote.responses
-    - votes = vote.votes.filter(vote => vote.includes(i+1)).length
-    h2= response
-    p= votes
+  #main
+    h1= vote.question
+    each response, i in vote.responses
+      - votes = vote.votes.filter(vote => vote.includes(i+1)).length
+      h2= response
+      p= votes
