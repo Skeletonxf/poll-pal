@@ -1,13 +1,69 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  //padding: 50px;
+  //font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+  //color: #00B7FF;
 }
 
-label {
-  display: block;
-  padding: 0.5em;
+body{
+  background-image: url("/images/background.jpg");
+  //margin:0px;
+  //padding:0px;
+}
+
+
+
+.button{
+  font-family: 'Open Sans Condensed', sans-serif;
+
+  background-color: white;
+  width: 400px;
+  border: 1px #a0a0a0 solid;
+  height:300px;
+  //border-radius: 30px;
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  cursor: pointer;
+  margin:auto;
+  font-size: 20px;
+  opacity:0.8;
+}
+
+.button:hover{
+  opacity: 0.9;
+
+}
+
+#buttonContainer{
+  //background-color: yellow;
+  margin-top:50px;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+@media only screen and (max-width: 600px) {
+    #buttonContainer {
+        flex-direction: column;
+    }
+}
+
+#buttonCreate{
+  //background-color: #a0d0a0;
+}
+
+#buttonJoin{
+  //background-color: #a0d0d0;
+}
+
+#header{
+  text-align: center;
+  padding:30px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 30px;
+  color: #303030;
 }

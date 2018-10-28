@@ -1,5 +1,19 @@
 extends layout
 
 block content
-  h1= title
+
+  <!-- h1= title
   p Welcome to #{title}
+  p Blah blah -->
+  head
+    title Poll Pal
+    link(rel='stylesheet', href="https://fonts.googleapis.com/css?family=Dancing+Script|Open+Sans+Condensed:300|Pacifico")
+
+  #header
+    h1  Poll Pal
+    img(src="/public/images/logocrop.png")
+  #buttonContainer
+    #buttonCreate.button
+      | CREATE POLL
+    #buttonJoin.button
+      | JOIN POLL
