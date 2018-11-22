@@ -12,13 +12,25 @@ The goal was to create a quick voting website that could be used in comittee mee
 
 Some similar (actually usable) tools include Strawpoll and Google Forms. RCV is neigh on impossible to use on either, despite being very useful for deciding between a few different options.
 
-[Index page](screenshots/index.png?raw=true)
+<figure>
+  <figcaption>Index page</figcaption>
+  <img src="screenshots/index.png?raw=true" height="200px"><img>
+</figure>
 
-[Creating a poll](screenshots/create.png?raw=true)
+<figure>
+  <figcaption>Creating a poll</figcaption>
+  <img src="screenshots/create.png?raw=true" height="200px"><img>
+</figure>
 
-[Voting on a poll](screenshots/vote.png?raw=true)
+<figure>
+  <figcaption>Voting on a poll</figcaption>
+  <img src="screenshots/vote.jpg?raw=true" height="200px"><img>
+</figure>
 
-[Viewing results of a poll](screenshots/results.png?raw=true)
+<figure>
+  <figcaption>Viewing results of a poll</figcaption>
+  <img src="screenshots/results.png?raw=true" height="200px"><img>
+</figure>
 
 We planned to have multiple types of voting systems and multi question polls but did not have time. Approval voting is implemented (incorrectly named as agreement on the app), with unfinished support for RCV.
 
